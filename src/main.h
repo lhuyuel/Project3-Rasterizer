@@ -5,10 +5,10 @@
 #define MAIN_H
 
 #ifdef __APPLE__
-	#include <GL/glfw.h>
+#include <GL/glfw.h>
 #else
-	#include <GL/glew.h>
-	#include <GL/glut.h>
+#include <GL/glew.h>
+#include <GL/glut.h>
 #endif
 
 #include <stdlib.h>
@@ -26,6 +26,7 @@
 #include "rasterizeKernels.h"
 #include "utilities.h"
 #include "ObjCore/objloader.h"
+#include "glm/gtc/matrix_transform.hpp"
 
 using namespace std;
 
@@ -51,12 +52,25 @@ float* cbo;
 int cbosize;
 int* ibo;
 int ibosize;
+float* nbo;
+int nbosize;
 
 //-------------------------------
-//----------CUDA STUFF-----------
+//----------CUDA & Camera STUFF-----------
 //-------------------------------
 
 int width=800; int height=800;
+//=========================================Settings==============================================
+//glm::vec3 camPos;
+//glm::mat4 viewM;
+//glm::mat4 projM;
+//glm::vec4 viewPort;
+//glm::mat4 modelM = utilityCore::buildTransformationMatrix(	glm::vec3(0.0, 0.0, 0.0),
+//															glm::vec3(0.0, 0.0, 0.0),
+//															glm::vec3(1.0, 1.0, 1.0));
+info otherInfo;
+
+//===============================================================================================
 
 //-------------------------------
 //-------------MAIN--------------
@@ -67,14 +81,22 @@ int main(int argc, char** argv);
 //-------------------------------
 //---------RUNTIME STUFF---------
 //-------------------------------
+//UI Helpers
+// UI Helpers
+int lastX = 0, lastY = 0;
+int theMenu = 0;
+int theButtonState = 0;
+int theModifierState = 0;
 
 void runCuda();
 
 #ifdef __APPLE__
-	void display();
+void display();
 #else
-	void display();
-	void keyboard(unsigned char key, int x, int y);
+void display();
+void keyboard(unsigned char key, int x, int y);
+
+void initParameters();
 #endif
 
 //-------------------------------
@@ -82,9 +104,9 @@ void runCuda();
 //-------------------------------
 
 #ifdef __APPLE__
-	void init();
+void init();
 #else
-	void init(int argc, char* argv[]);
+void init(int argc, char* argv[]);
 #endif
 
 void initPBO(GLuint* pbo);
